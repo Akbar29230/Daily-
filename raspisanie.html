@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Расписание дня — час за часом</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #0B2027;
+    --panel: #12313A;
+    --panel-2: #17393F;
+    --gold: #C9A227;
+    --gold-soft: rgba(201,162,39,0.35);
+    --emerald: #3E8272;
+    --cream: #F4EFE4;
+    --muted: #9FB8B3;
+    --line: rgba(244,239,228,0.12);
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    font-family:'Inter', sans-serif;
+    color:var(--cream);
+    background:
+      linear-gradient(180deg,
+        #2E4A3F 0%,
+        #1E3A3E 18%,
+        #14313A 38%,
+        #102A32 58%,
+        #0C232B 78%,
+        #081A21 100%);
+    min-height:100vh;
+    padding: 48px 20px 80px;
+  }
+  .wrap{ max-width:720px; margin:0 auto; }
+
+  /* -------- header -------- */
+  .bismillah{
+    text-align:center;
+    font-family:'Amiri', serif;
+    font-size:22px;
+    color:var(--gold);
+    opacity:0.9;
+    margin-bottom:6px;
+  }
+  .eyebrow{
+    text-align:center;
+    font-size:12px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:10px;
+  }
+  h1{
+    font-family:'PT Serif', serif;
+    font-weight:700;
+    font-size:clamp(28px,5vw,40px);
+    text-align:center;
+    margin:0 0 8px;
+    letter-spacing:0.01em;
+  }
+  .sub{
+    text-align:center;
+    color:var(--muted);
+    font-size:14.5px;
+    max-width:480px;
+    margin:0 auto 40px;
+    line-height:1.6;
+  }
+
+  /* -------- ayah card -------- */
+  .ayah{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:28px 26px;
+    margin: 36px 0;
+    overflow:hidden;
+  }
+  .ayah::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(45deg, var(--gold-soft) 0 1px, transparent 1px 14px),
+      repeating-linear-gradient(-45deg, var(--gold-soft) 0 1px, transparent 1px 14px);
+    opacity:0.06;
+    pointer-events:none;
+  }
+  .ayah-arabic{
+    font-family:'Amiri', serif;
+    font-size:24px;
+    line-height:2;
+    text-align:right;
+    direction:rtl;
+    color:var(--gold);
+    margin-bottom:14px;
+  }
+  .ayah-text{
+    font-family:'PT Serif', serif;
+    font-style:italic;
+    font-size:17px;
+    line-height:1.6;
+    color:var(--cream);
+    margin-bottom:10px;
+  }
+  .ayah-ref{
+    font-size:12.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  /* -------- timeline -------- */
+  .timeline{
+    position:relative;
+    margin-top:10px;
+    padding-left:26px;
+    border-left:1px solid var(--line);
+  }
+  .block{
+    position:relative;
+    padding: 4px 0 34px 20px;
+  }
+  .block::before{
+    content:"";
+    position:absolute;
+    left:-31px; top:6px;
+    width:9px; height:9px;
+    border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 0 4px rgba(201,162,39,0.15);
+  }
+  .block.rest::before{ background:var(--emerald); box-shadow:0 0 0 4px rgba(62,130,114,0.15); }
+
+  .row-top{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .time{
+    font-family:'PT Serif', serif;
+    font-size:14px;
+    color:var(--gold);
+    letter-spacing:0.02em;
+    white-space:nowrap;
+  }
+  .block.rest .time{ color:var(--emerald); }
+  .title{
+    font-size:17.5px;
+    font-weight:600;
+    margin:4px 0 6px;
+  }
+  .phrase{
+    font-size:14px;
+    color:var(--muted);
+    line-height:1.55;
+    margin-bottom:8px;
+  }
+  .pomo{
+    display:inline-flex;
+    gap:4px;
+    font-size:13px;
+    color:var(--gold-soft);
+    letter-spacing:0.03em;
+  }
+  .pomo span{ color:var(--gold); }
+
+  /* -------- footer -------- */
+  .footer{
+    text-align:center;
+    margin-top:50px;
+    padding-top:30px;
+    border-top:1px solid var(--line);
+  }
+  .footer .dua{
+    font-family:'PT Serif', serif;
+    font-style:italic;
+    font-size:16px;
+    color:var(--cream);
+    margin-bottom:8px;
+  }
+  .footer .tag{
+    font-size:13px;
+    color:var(--muted);
+  }
+
+  @media (max-width:480px){
+    body{ padding:32px 14px 60px; }
+    .ayah{ padding:22px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+  <div class="eyebrow">Ин ша Аллах</div>
+  <h1>Твой день, час за часом</h1>
+  <p class="sub">Расписание подготовки к IELTS с методом Помодоро (25 мин работа / 5 мин перерыв) и аятами в поддержку пути.</p>
+
+  <div class="ayah">
+    <div class="ayah-arabic">وَٱلْعَصْرِ ۝ إِنَّ ٱلْإِنسَٰنَ لَفِى خُسْرٍ ۝ إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ وَتَوَاصَوْا۟ بِٱلْحَقِّ وَتَوَاصَوْا۟ بِٱلصَّبْرِ</div>
+    <div class="ayah-text">Клянусь временем! Поистине, человек в убытке — кроме тех, кто уверовал, творил добрые дела и заповедал друг другу истину и терпение.</div>
+    <div class="ayah-ref">Сура «Аль-Аср» (103:1–3)</div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="block">
+      <div class="row-top"><span class="time">06:00 – 08:00</span></div>
+      <div class="title">💡 Идеи</div>
+      <div class="phrase">Открой день с ясной головой — лучшие мысли для эссе приходят по утрам.</div>
+      <div class="pomo"><span>🍅🍅🍅🍅</span> 4 × (25/5)</div>
+    </div>
+
+    <div class="block rest">
+      <div class="row-top"><span class="time">08:00 – 09:00</span></div>
+      <div class="title">🍳 Завтрак</div>
+      <div class="phrase">Дай телу топливо — и оно отблагодарит тебя концентрацией.</div>
+    </div>
+
+    <div class="block">
+      <div class="row-top"><span class="time">09:00 – 11:00</span></div>
+      <div class="title">🗣 Speaking</div>
+      <div class="phrase">Говори смело. Сегодняшние ошибки — завтрашняя беглость.</div>
+      <div class="pomo"><span>🍅🍅🍅🍅</span> 4 × (25/5)</div>
+    </div>
+
+    <div class="block rest">
+      <div class="row-top"><span class="time">11:00 – 13:00</span></div>
+      <div class="title">😴 Отдых</div>
+      <div class="phrase">Отдых — не пауза в работе, а часть работы.</div>
+    </div>
+
+    <div class="block">
+      <div class="row-top"><span class="time">13:00 – 15:00</span></div>
+      <div class="title">🎧 Listening</div>
+      <div class="phrase">Слушай внимательно — каждое понятое слово приближает к Band 7.</div>
+      <div class="pomo"><span>🍅🍅🍅🍅</span> 4 × (25/5)</div>
+    </div>
+
+    <div class="block rest">
+      <div class="row-top"><span class="time">15:00 – 17:00</span></div>
+      <div class="title">😴 Отдых</div>
+      <div class="phrase">Перезагрузись — впереди ещё половина продуктивного дня.</div>
+    </div>
+
+  </div>
+
+  <div class="ayah">
+    <div class="ayah-arabic">فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا ۝ إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا</div>
+    <div class="ayah-text">Поистине, за трудностью приходит облегчение. Поистине, за трудностью приходит облегчение.</div>
+    <div class="ayah-ref">Сура «Аш-Шарх» (94:5–6)</div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="block">
+      <div class="row-top"><span class="time">17:00 – 19:00</span></div>
+      <div class="title">📖 Reading</div>
+      <div class="phrase">Читай вдумчиво — здесь терпение решает больше, чем скорость.</div>
+      <div class="pomo"><span>🍅🍅🍅🍅</span> 4 × (25/5)</div>
+    </div>
+
+    <div class="block rest">
+      <div class="row-top"><span class="time">19:00 – 20:00</span></div>
+      <div class="title">😴 Отдых</div>
+      <div class="phrase">Последний перерыв перед финалом дня.</div>
+    </div>
+
+    <div class="block">
+      <div class="row-top"><span class="time">20:00 – 21:00</span></div>
+      <div class="title">✍️ Writing</div>
+      <div class="phrase">Пиши уверенно — структура и практика уже с тобой.</div>
+      <div class="pomo"><span>🍅🍅</span> 2 × (25/5)</div>
+    </div>
+
+    <div class="block rest">
+      <div class="row-top"><span class="time">21:00 – 22:00</span></div>
+      <div class="title">🌙 Подготовка ко сну</div>
+      <div class="phrase">Заверши день спокойно — качественный сон тоже часть подготовки.</div>
+    </div>
+
+    <div class="block rest">
+      <div class="row-top"><span class="time">22:00</span></div>
+      <div class="title">💤 Отбой</div>
+      <div class="phrase">Довериться ритму дня — тоже дисциплина.</div>
+    </div>
+
+  </div>
+
+  <div class="ayah">
+    <div class="ayah-arabic">لَا يُكَلِّفُ ٱللَّهُ نَفْسًا إِلَّا وُسْعَهَا</div>
+    <div class="ayah-text">Аллах не возлагает на душу сверх её возможностей.</div>
+    <div class="ayah-ref">Сура «Аль-Бакара» (2:286)</div>
+  </div>
+
+  <div class="footer">
+    <div class="dua">«Господи, облегчи, а не затрудняй. Заверши мои дела благом»</div>
+    <div class="tag">Ин ша Аллах — с именем Аллаха каждый помодоро приближает к цели ✦</div>
+  </div>
+
+</div>
+</body>
+</html>
